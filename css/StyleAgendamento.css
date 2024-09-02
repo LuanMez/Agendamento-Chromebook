@@ -1,0 +1,270 @@
+/*Estilo do calendario*/
+.conteudo {
+
+  margin-left: auto;
+  margin-right: auto;
+  width: 500px;
+  background-color: #1B98E0;
+  border-radius: 10px;
+  padding-bottom: 15px;
+}
+
+hr {
+
+  background-color: rgb(0, 0, 0);
+  color: black;
+  width: 90%;
+}
+
+h2 {
+
+  text-align: center;
+  margin-top: 20px;
+  font-size: 32px;
+  text-transform: uppercase;
+}
+
+.btn-ant,
+.btn-pro {
+
+  position: absolute;
+  top: 10%;
+  height: 32px;
+  line-height: 32px;
+  margin-top: -16px;
+  background-color: #1B98E0;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.264);
+}
+
+.btn-ant {
+  right: 60%;
+}
+
+.btn-pro {
+
+  left: 60%;
+}
+
+.btn-ant:hover,
+.btn-pro:hover {
+
+  background-color: #FF758F;
+}
+
+table {
+
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+thead {
+
+  font-weight: 600;
+}
+
+td {
+
+  border: 1px solid black;
+  text-align: center;
+  height: 61px;
+  width: 61px;
+}
+
+tbody td {
+
+  cursor: pointer;
+}
+
+tbody td:hover {
+
+  background-color: #ff339953;
+  color: #FF3398;
+  /*border-radius: 15px;*/
+
+}
+
+tbody .dia-atual {
+
+  border: 2px solid #FF0084;
+  /*border-radius: 15px;*/
+}
+
+.mes-anterior,
+.proximo-mes {
+
+  color: #cdb1d2;
+}
+
+.mes-anterior:hover,
+.proximo-mes:hover {
+
+  background-color: #98a0a063;
+  color: rgba(0, 0, 0, 0.471);
+}
+
+.dia-selecionado {
+  background-color: #FF4D6D;
+  color: #ffffff;
+}
+
+/*escolher turnos*/
+.secao-turno>h3 {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 24px;
+}
+
+#turno {
+  background-color: #FF4D6D;
+  width: 470px;
+  padding: 20px;
+  border-radius: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.turno.selected {
+  background-color: #ff5f5f7d;
+  border-radius: 5px;
+}
+
+#turno>p {
+  display: inline;
+  font-size: 20px;
+  color: white;
+}
+
+#tarde {
+  margin-left: 32%;
+}
+
+#noite {
+  margin-left: 32%;
+}
+
+#turno>p:hover {
+
+  cursor: pointer;
+  background-color: #FF758F;
+  color: black;
+  border-radius: 5px;
+}
+
+.horas {
+  /*caixa de horario com cada horario*/
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  background-color: #1B98E0;
+  width: 470px;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: #FF4D6D 2px 2px 2px;
+}
+
+.horario {
+  /*cor de cada horario*/
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  color: #ffffff;
+  background-color: #FF4D6D;
+  text-align: center;
+  cursor: pointer;
+}
+
+.horario.selected {
+  background-color: #ff5f5f7d;
+}
+
+article {
+
+  display: inline-block;
+  margin-left: 20px;
+}
+
+article>div {
+
+  background-color: #FF5F5F;
+  color: white;
+  width: 40px;
+  margin-top: 15px;
+  padding: 5px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+article>div:hover {
+
+  cursor: pointer;
+  background-color: #ff5f5f7d;
+  color: white;
+}
+
+/*Estilo das Informações do serviço*/
+.informacoes {
+
+  background-color: #FFD2E1;
+  width: 470px;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#servico,
+#preco,
+#tempo {
+
+  margin: 0px;
+}
+
+#servico {
+
+  display: inline;
+}
+
+#preco {
+
+  display: inline;
+  position: relative;
+  left: 240px;
+
+}
+
+#tempo {
+
+  font-size: 15px;
+  color: rgba(0, 0, 0, 0.503);
+  position: relative;
+  left: 380px;
+}
+
+/*Section para selecionar funcionario*/
+#preferencia {
+  border-radius: 5px;
+}
+
+/*Botão de reservar*/
+#submit {
+  background-color: #FC749C;
+  color: #ffffff;
+  width: 300px;
+  padding: 15px;
+  border-radius: 10px;
+  display: block;
+  margin: auto;
+  font-size: 20px;
+  border: 0px;
+}
+
+#submit:hover {
+  background-color: #FF8FA3;
+}
