@@ -17,12 +17,12 @@
 
             <header>
 
-                <a class="btn-ant" id="btn_prev"><img src="https://i.imgur.com/yDpGRK8.png" /></a>
+                <a class="btn-ant" id="btn_prev"><img src="https://i.imgur.com/wrwDSRQ.png" /></a>
 
-                <h2 id="mes">Maio</h2>
-                <h2 id="ano">2024</h2>
+                <h2 id="mes" style="color: white;">Mês</h2>
+                <h2 id="ano" style="color: white;">Ano</h2>
 
-                <a class="btn-pro" id="btn_next"><img src="https://i.imgur.com/PHg8KgG.png" /></a>
+                <a class="btn-pro" id="btn_next"><img src="https://i.imgur.com/4NINDmb.png" /></a>
             </header>
 
             <hr>
@@ -119,7 +119,6 @@
         <div id="turno">
 
             <p id="manha">Manhã</p>
-            <p id="tarde">Tarde</p>
             <p id="noite">Noite</p>
 
         </div>
@@ -129,26 +128,6 @@
     <section class="horas">
     </section>
 
-    <section class="informacoes">
-
-        <h3 style="margin-left:20px;" id="servico">Funcionário:</h3>
-
-        <select id="preferencia">
-        </select><br>
-
-        <hr>
-
-        <h3 style="margin-left:20px;" id="servico">Serviço:</h3>
-
-        <select id="servicos2">
-        </select><br>
-
-        <hr>
-
-        <h3 style="margin-left:20px;" id="valor_final">Valor Final:</h3>
-
-
-    </section>
     <br>
     <input type="submit" id="submit" value="Reservar">
 </body>
