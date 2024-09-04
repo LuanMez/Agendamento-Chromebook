@@ -24,6 +24,11 @@ h2 {
   text-transform: uppercase;
 }
 
+td {
+  /*cor dos numeros do calendario*/
+  color: white;
+}
+
 .btn-ant,
 .btn-pro {
 
@@ -49,7 +54,7 @@ h2 {
 .btn-ant:hover,
 .btn-pro:hover {
 
-  background-color: #FF758F;
+  background-color: #247BA0;
 }
 
 table {
@@ -67,7 +72,7 @@ thead {
 
 td {
 
-  border: 1px solid black;
+  border: 1px solid rgb(255, 255, 255);
   text-align: center;
   height: 61px;
   width: 61px;
@@ -80,15 +85,15 @@ tbody td {
 
 tbody td:hover {
 
-  background-color: #ff339953;
-  color: #FF3398;
+  background-color: #247BA0;
+  color: #1B98E0;
   /*border-radius: 15px;*/
 
 }
 
 tbody .dia-atual {
 
-  border: 2px solid #FF0084;
+  border: 2px solid #13293D;
   /*border-radius: 15px;*/
 }
 
@@ -106,7 +111,7 @@ tbody .dia-atual {
 }
 
 .dia-selecionado {
-  background-color: #FF4D6D;
+  background-color: #13293D;
   color: #ffffff;
 }
 
@@ -118,7 +123,8 @@ tbody .dia-atual {
 }
 
 #turno {
-  background-color: #FF4D6D;
+  /*cor do turno manha e noite*/
+  background-color: #1B98E0;
   width: 470px;
   padding: 20px;
   border-radius: 10px;
@@ -127,7 +133,7 @@ tbody .dia-atual {
 }
 
 .turno.selected {
-  background-color: #ff5f5f7d;
+  background-color: #1B98E0;
   border-radius: 5px;
 }
 
@@ -137,19 +143,21 @@ tbody .dia-atual {
   color: white;
 }
 
-#tarde {
-  margin-left: 32%;
+#manha {
+  margin-left: 22%;
+  padding: 3px;
 }
 
 #noite {
   margin-left: 32%;
+  padding: 3px;
 }
 
 #turno>p:hover {
 
   cursor: pointer;
-  background-color: #FF758F;
-  color: black;
+  background-color: #247BA0;
+  color: white;
   border-radius: 5px;
 }
 
@@ -165,7 +173,6 @@ tbody .dia-atual {
   margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: #FF4D6D 2px 2px 2px;
 }
 
 .horario {
@@ -174,13 +181,13 @@ tbody .dia-atual {
   padding: 5px;
   border-radius: 5px;
   color: #ffffff;
-  background-color: #FF4D6D;
+  background-color: #247BA0;
   text-align: center;
   cursor: pointer;
 }
 
 .horario.selected {
-  background-color: #ff5f5f7d;
+  background-color: #13293D;
 }
 
 article {
@@ -254,7 +261,7 @@ article>div:hover {
 
 /*Botão de reservar*/
 #submit {
-  background-color: #FC749C;
+  background-color: #1B98E0;
   color: #ffffff;
   width: 300px;
   padding: 15px;
@@ -266,5 +273,5 @@ article>div:hover {
 }
 
 #submit:hover {
-  background-color: #FF8FA3;
+  background-color: #247BA0;
 }
