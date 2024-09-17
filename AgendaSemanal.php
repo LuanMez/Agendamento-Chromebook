@@ -94,12 +94,12 @@ function gerarHorarios()
 
 
 
-// Verifica se o parâmetro id_salao foi passado na URL
-if (isset($_GET['id_salao'])) {
-    $id_salao = $_GET['id_salao'];
+// Verifica se o parâmetro id_professor foi passado na URL
+if (isset($_GET['id_professor'])) {
+    $id_professor = $_GET['id_professor'];
 
     // Conexão com o banco de dados
-    $conn = new mysqli("localhost", "root", "", "ads");
+    $conn = new mysqli("localhost", "root", "", "chromebook");
     if ($conn->connect_error) {
         die("Falha na conexão: " . $conn->connect_error);
     }
@@ -111,16 +111,11 @@ if (isset($_GET['id_salao'])) {
     $horarios = gerarHorarios();
 
     // Consulta SQL para obter os agendamentos da semana
-    $sql = "SELECT agendamentos.*, 
-                   cliente.nome AS cliente_nome, 
-                   servicos.nome AS servico_nome,
-                   servicos.tempo AS servico_tempo,
-                   profissional.nome AS profissional_nome
-            FROM agendamentos
-            JOIN cliente ON agendamentos.id_cliente = cliente.id
-            JOIN servicos ON agendamentos.id_servico = servicos.id
-            JOIN profissional ON agendamentos.id_profissional = profissional.id
-            WHERE agendamentos.id_salao = ? AND data BETWEEN ? AND ?";
+    $sql = "SELECT agendamento.*, professor.nome AS professor_nome
+        FROM agendamento
+        JOIN professor ON agendamento.id_professor = professor.id
+        WHERE agendamento.data BETWEEN ? AND ?";
+
 
     // Prepara a consulta SQL
     $stmt = $conn->prepare($sql);
@@ -129,7 +124,8 @@ if (isset($_GET['id_salao'])) {
     }
 
     // Vincula os parâmetros à consulta preparada
-    $stmt->bind_param("iss", $id_salao, $inicioDaSemana, $fimDaSemana);
+    $stmt->bind_param("ss", $inicioDaSemana, $fimDaSemana);
+
 
     // Executa a consulta
     $stmt->execute();
@@ -162,25 +158,15 @@ if (isset($_GET['id_salao'])) {
                 case 'Friday':
                     $diaSemana = 'Sexta';
                     break;
-                case 'Saturday':
-                    $diaSemana = 'Sábado';
-                    break;
-                case 'Sunday':
-                    $diaSemana = 'Domingo';
-                    break;
             }
 
-            // Adiciona o agendamento ao array de horários
+            // Adiciona o agendamento ao array de horários exibe pro usuario
             if (isset($horarios[$hora_formatada][$diaSemana])) {
                 $horarios[$hora_formatada][$diaSemana][] = [
-                    'servico' => $agendamento['servico_nome'],
-                    'cliente' => $agendamento['cliente_nome'],
-                    'tempo' => $agendamento['servico_tempo'],
-                    'profissional' => $agendamento['profissional_nome'],
+                    'professor_nome' => $agendamento['professor_nome'],  // Exibe o nome do professor
                     'data_hora' => $agendamento['data'] . ' ' . $agendamento['horario']
                 ];
             } else {
-
                 $horarios[$hora_formatada][$diaSemana] = [];
             }
         }
@@ -263,8 +249,9 @@ if (isset($_GET['id_salao'])) {
     <h1>Agendamento Semanal dos Chromebooks</h1>
     <h1>Data Atual: <?php echo strftime('%A, %d de %B de %Y', strtotime($hoje)); ?></h1>
     <div class="navegacao">
-        <a href="?id_salao=<?php echo $id_salao; ?>&data=<?php echo date('d-m-Y', strtotime($inicioDaSemana . ' - 7 days')); ?>">Semana Anterior</a>
-        <a href="?id_salao=<?php echo $id_salao; ?>&data=<?php echo date('d-m-Y', strtotime($inicioDaSemana . ' + 7 days')); ?>">Próxima Semana</a>
+        <a href="Agendamento.php">Agendar</a>
+        <a href="?id_professor=<?php echo $id_professor; ?>&data=<?php echo date('d-m-Y', strtotime($inicioDaSemana . ' - 7 days')); ?>">Semana Anterior</a>
+        <a href="?id_professor=<?php echo $id_professor; ?>&data=<?php echo date('d-m-Y', strtotime($inicioDaSemana . ' + 7 days')); ?>">Próxima Semana</a>
     </div>
     <table>
         <tr>
@@ -275,26 +262,24 @@ if (isset($_GET['id_salao'])) {
             <th>Quinta</th>
             <th>Sexta</th>
         </tr>
-        <?php foreach ($horarios as $hora => $dias) : ?>
-            <tr>
-                <td><?php echo htmlspecialchars($hora); ?></td>
-                <?php foreach (['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'] as $dia) : ?>
-                    <td>
-                        <?php if (isset($dias[$dia]) && !empty($dias[$dia])) : ?>
-                            <?php foreach ($dias[$dia] as $agendamento) : ?>
-                                <div class="agendamento">
-                                    <strong><?php echo htmlspecialchars($agendamento['profissional']); ?></strong><br>
-                                    <?php echo htmlspecialchars($agendamento['servico']); ?><br>
-                                    <?php echo htmlspecialchars($agendamento['cliente']); ?><br>
-                                    <?php echo htmlspecialchars($agendamento['tempo']); ?> minutos<br>
-                                    <small><?php echo htmlspecialchars(date('H:i', strtotime($agendamento['data_hora']))); ?></small>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </td>
-                <?php endforeach; ?>
-            </tr>
-        <?php endforeach; ?>
+        <?php if (isset($horarios) && !empty($horarios)) : ?>
+            <?php foreach ($horarios as $hora => $dias) : ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($hora); ?></td>
+                    <?php foreach (['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'] as $dia) : ?>
+                        <td>
+                            <?php if (isset($dias[$dia]) && !empty($dias[$dia])) : ?>
+                                <?php foreach ($dias[$dia] as $agendamento) : ?>
+                                    <div class="agendamento">
+                                        <strong><?php echo htmlspecialchars($agendamento['professor_nome']); ?></strong><br> <!-- Exibe o nome do professor -->
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </table>
 
 </body>

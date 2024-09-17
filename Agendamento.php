@@ -1,3 +1,12 @@
+<?php
+require 'Login.php';
+date_default_timezone_set("America/Sao_Paulo");
+
+$id = $_SESSION['id'];
+$actualDate = date("d-m-Y");
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -5,7 +14,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/StyleAgendamento.css">
-    <script type="text/javascript" src="ScriptAgentamento.js"></script>
+
     <title>Agendamento</title>
 </head>
 
@@ -127,9 +136,12 @@
 
     <section class="horas">
     </section>
+    <input type="hidden" id="redirect" value="<?php echo "?id_professor=$id&data=$actualDate" ?>">
 
     <br>
     <input type="submit" id="submit" value="Reservar">
 </body>
 
 </html>
+
+<script type="text/javascript" src="main.js"></script>

@@ -1,0 +1,299 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #1B98E0;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background-color: #1B98E0;
+}
+
+/* COMEÇO DA HEADER */
+header {
+  position: relative;
+  height: 12%;
+  /* Ajuste conforme necessário */
+  background-color: #1B98E0;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.header-container {
+  font-family: "Syne", sans-serif;
+  width: 100%;
+  height: 100%;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.syne-une {
+  font-family: "Syne", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.dsada-1-icon {
+  border-radius: var(--br-5xs);
+  width: 90px;
+  height: 89px;
+  object-fit: cover;
+}
+
+input,
+select {
+  border-radius: 8px;
+  width: 95%;
+  /* Ajuste conforme necessário */
+  height: 40px;
+  background-color: #EDF2F7;
+  border: none;
+  margin-bottom: 10px;
+  padding-left: 15px;
+  font-family: "Roboto";
+  font-size: large;
+  color: #6c757d;
+}
+
+::placeholder {
+  font-size: large;
+  padding-left: 15px;
+}
+
+.registrar {
+  background-color: #FC749C;
+  color: #fff;
+  display: inline-block;
+  width: 186px;
+  height: 50px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.registrar:hover {
+  background-color: #FFB3C1;
+}
+
+.pgina-inicial,
+.registrar {
+  font-weight: 500;
+  font-size: large;
+}
+
+.pgina-inicial {
+  background-color: #4A5568;
+  display: inline-block;
+  width: 186px;
+  height: 50px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+}
+
+.pgina-inicial:hover {
+  background-color: #6c757d;
+}
+
+/*.registrar1 {
+
+    /* top: 620px;
+    left: 924px; */
+/*}*/
+
+.bannerAgendamento {
+  font-size: 40px;
+  display: inline-block;
+  font-family: "Syne", sans-serif;
+  width: 419px;
+  height: 109px;
+  color: #000;
+}
+
+.unhas-1-icon4 {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+}
+
+#submit {
+  background-color: #1B98E0;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+}
+
+#submit:hover {
+  background-color: #13293D;
+}
+
+a {
+  text-decoration: none;
+  color: #FC749C;
+}
+
+a:hover {
+  color: #fc749d7f;
+}
+
+/* FIM DA HEADER */
+
+.conteudo {
+  flex: 1 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card {
+  border-radius: 8px;
+  background-color: #fff;
+  width: 70%;
+  /* Ajuste conforme necessário */
+  max-width: 450px;
+  height: auto;
+  box-shadow: rgba(164, 232, 255, 0.4) 5px 5px;
+  padding: 20px;
+}
+
+.entre-na-sua {
+  color: #4A5568;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+form {
+  text-align: center;
+  margin: 15px;
+}
+
+.login-card-child1 {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-card-child2 {
+  background-color: #FC749C;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  font-size: large;
+  margin-top: 20px;
+}
+
+.login-card-child2:hover {
+  background-color: #FFB3C1;
+}
+
+.login5 {
+  font-size: 36px;
+  color: #1B98E0;
+  margin-bottom: 10px;
+}
+
+.login4 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.esqueceu-sua-senha {
+  font-size: 18px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+/*COMEÇO DO FOOTER*/
+
+.footer-container {
+  width: 100%;
+  position: sticky;
+  overflow: hidden;
+  color: rgb(255, 255, 255);
+}
+
+.footer-container a {
+  color: #FFFFFF;
+}
+
+.footer-container a:hover {
+  color: #FC749C;
+}
+
+footer {
+  background-color: #000;
+  color: aqua;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.footer-contact,
+.footer-social-media,
+.footer-socialmediaicons,
+.footer-about-us,
+.footer-terms,
+.footer-phone,
+.footer-email {
+  font-size: 24px;
+  text-align: left;
+}
+
+.footer-contact {
+  top: 56px;
+  left: 536px;
+}
+
+.footer-social-media {
+  top: 56px;
+  left: 1034px;
+}
+
+.footer-socialmediaicons {
+  top: 90px;
+  left: 1034px;
+}
+
+.footer-about-us {
+  top: 56px;
+  left: 94px;
+}
+
+.footer-terms {
+  top: 98px;
+  left: 93px;
+}
+
+.icone {
+  width: 30px;
+  height: 30px;
+  margin-bottom: -5px;
+}
+
+.footer-phone {
+  top: 98px;
+  left: 536px;
+}
+
+.footer-email {
+  top: 140px;
+  left: 536px;
+}
+
+/* FIM DO FOOTER */
