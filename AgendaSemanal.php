@@ -111,7 +111,7 @@ if (isset($_GET['id_professor'])) {
     $horarios = gerarHorarios();
 
     // Consulta SQL para obter os agendamentos da semana
-    $sql = "SELECT agendamento.*, professor.nome AS professor_nome
+    $sql = "SELECT agendamento.*, professor.nome AS professor_nome, agendamento.idCor
         FROM agendamento
         JOIN professor ON agendamento.id_professor = professor.id
         WHERE agendamento.data BETWEEN ? AND ?";
@@ -164,7 +164,8 @@ if (isset($_GET['id_professor'])) {
             if (isset($horarios[$hora_formatada][$diaSemana])) {
                 $horarios[$hora_formatada][$diaSemana][] = [
                     'professor_nome' => $agendamento['professor_nome'],  // Exibe o nome do professor
-                    'data_hora' => $agendamento['data'] . ' ' . $agendamento['horario']
+                    'data_hora' => $agendamento['data'] . ' ' . $agendamento['horario'],
+                    'idCor' => $agendamento['idCor']
                 ];
             } else {
                 $horarios[$hora_formatada][$diaSemana] = [];
@@ -217,8 +218,8 @@ if (isset($_GET['id_professor'])) {
         }
 
         .agendamento {
-            background-color: #FFCCD5;
-            padding: 8px;
+            /*cor do chromebook */
+            padding: 6px;
             border-radius: 4px;
             margin-bottom: 4px;
             font-size: 14px;
@@ -270,7 +271,33 @@ if (isset($_GET['id_professor'])) {
                         <td>
                             <?php if (isset($dias[$dia]) && !empty($dias[$dia])) : ?>
                                 <?php foreach ($dias[$dia] as $agendamento) : ?>
-                                    <div class="agendamento">
+                                    <?php
+                                    // Defina uma cor padrão para cada agendamento
+                                    $color = ''; // Cor padrão
+
+                                    if (isset($agendamento['idCor'])) {
+                                        switch ($agendamento['idCor']) { // switch para alterar as cores de acordo com idCor
+                                            case 1:
+                                                $color = 'orange';
+                                                break;
+                                            case 2:
+                                                $color = 'green';
+                                                break;
+                                            case 3:
+                                                $color = 'yellow';
+                                                break;
+                                            case 4:
+                                                $color = 'blue';
+                                                break;
+                                            case 5:
+                                                $color = 'red';
+                                                break;
+                                            default:
+                                                $color = 'gray'; // Cor padrão caso nenhum dos valores seja encontrado
+                                        }
+                                    }
+                                    ?>
+                                    <div class="agendamento" style="background-color: <?= $color ?>;">
                                         <strong><?php echo htmlspecialchars($agendamento['professor_nome']); ?></strong><br> <!-- Exibe o nome do professor -->
                                     </div>
                                 <?php endforeach; ?>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 18/09/2024 às 08:10
+-- Tempo de geração: 15/09/2024 às 22:37
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -34,6 +34,14 @@ CREATE TABLE `agendamento` (
   `data` varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `idCor` int(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `agendamento`
+--
+
+INSERT INTO `agendamento` (`id`, `id_professor`, `horario`, `data`, `idCor`) VALUES
+(27, 1, 'null', '12-09-2024', 1),
+(28, 1, '8:50', '12-09-2024', 1);
 
 -- --------------------------------------------------------
 
@@ -81,7 +89,7 @@ ALTER TABLE `professor`
 -- AUTO_INCREMENT de tabela `agendamento`
 --
 ALTER TABLE `agendamento`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de tabela `professor`
