@@ -243,71 +243,162 @@ if (isset($_GET['id_professor'])) {
         .navegacao a:hover {
             background-color: #006494;
         }
+
+        .manha {
+            background-color: #e0f7fa;
+            /* Cor azul clara para os horários da manhã */
+        }
+
+        .noite {
+            background-color: #ffe0b2;
+            /* Cor laranja clara para os horários da noite */
+        }
+
+        .agendamento {
+            padding: 5px;
+            color: #000;
+        }
     </style>
 </head>
 
 <body>
+    <?php
+
+    switch (date("l", strtotime($hoje))) {
+        case "Monday":
+            $nomeDia = "segunda-feira";
+            break;
+        case "Tuesday":
+            $nomeDia = "terça-feira";
+            break;
+        case "Wednesday":
+            $nomeDia = "quarta-feira";
+            break;
+        case "Thursday":
+            $nomeDia = "quinta-feira";
+            break;
+        case "Friday":
+            $nomeDia = "sexta-feira";
+            break;
+        case "Saturday";
+            $nomeDia = "sábado";
+            break;
+        case "Sunday":
+            $nomeDia = "domingo";
+            break;
+    }
+
+    switch (date("F", strtotime($hoje))) {
+        case "January":
+            $nomeMes = "Janeiro";
+            break;
+        case "February":
+            $nomeMes = "Fevereiro";
+            break;
+        case "March":
+            $nomeMes = "Março";
+            break;
+        case "April":
+            $nomeMes = "Abril";
+            break;
+        case "May":
+            $nomeMes = "Maio";
+            break;
+        case "June";
+            $nomeMes = "Junho";
+            break;
+        case "July":
+            $nomeMes = "Julho";
+            break;
+        case "August":
+            $nomeMes = "Agosto";
+            break;
+        case "September":
+            $nomeMes = "Setembro";
+            break;
+        case "Octuber":
+            $nomeMes = "Outubro";
+            break;
+        case "November":
+            $nomeMes = "Novembro";
+            break;
+        case "December":
+            $nomeMes = "Dezembro";
+            break;
+    }
+
+    ?>
     <h1>Agendamento Semanal dos Chromebooks</h1>
-    <h1>Data Atual: <?php echo strftime('%A, %d de %B de %Y', strtotime($hoje)); ?></h1>
+    <h1>Data Atual: <?php echo $nomeDia . ", " . date("d", strtotime($hoje)) . " de " .  $nomeMes . " de " . date("Y", strtotime($hoje)); ?></h1>
     <div class="navegacao">
         <a href="Agendamento.php">Agendar</a>
         <a href="?id_professor=<?php echo $id_professor; ?>&data=<?php echo date('d-m-Y', strtotime($inicioDaSemana . ' - 7 days')); ?>">Semana Anterior</a>
         <a href="?id_professor=<?php echo $id_professor; ?>&data=<?php echo date('d-m-Y', strtotime($inicioDaSemana . ' + 7 days')); ?>">Próxima Semana</a>
     </div>
     <table>
-        <tr>
-            <th>Hora</th>
-            <th>Segunda</th>
-            <th>Terça</th>
-            <th>Quarta</th>
-            <th>Quinta</th>
-            <th>Sexta</th>
-        </tr>
-        <?php if (isset($horarios) && !empty($horarios)) : ?>
-            <?php foreach ($horarios as $hora => $dias) : ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($hora); ?></td>
-                    <?php foreach (['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'] as $dia) : ?>
-                        <td>
-                            <?php if (isset($dias[$dia]) && !empty($dias[$dia])) : ?>
-                                <?php foreach ($dias[$dia] as $agendamento) : ?>
-                                    <?php
-                                    // Defina uma cor padrão para cada agendamento
-                                    $color = ''; // Cor padrão
+        <thead>
+            <tr>
+                <th>Horário</th>
+                <th>Segunda</th>
+                <th>Terça</th>
+                <th>Quarta</th>
+                <th>Quinta</th>
+                <th>Sexta</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (isset($horarios) && !empty($horarios)) : ?>
+                <?php foreach ($horarios as $hora => $dias): ?>
+                    <?php
+                    // Converte o horário para um inteiro (somente a hora) para verificar se é manhã ou noite
+                    $horaInt = (int) explode(':', $hora)[0];
+                    $classe = ($horaInt < 14) ? 'manha' : 'noite'; // Aplica 'manha' se for antes de 12h, senão 'noite'
+                    ?>
+                    <tr class="<?php echo $classe; ?>">
+                        <td><?php echo htmlspecialchars($hora); ?></td>
+                        <?php foreach (['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'] as $dia): ?>
+                            <td>
+                                <?php if (isset($dias[$dia]) && !empty($dias[$dia])): ?>
+                                    <?php foreach ($dias[$dia] as $agendamento): ?>
+                                        <?php
+                                        // Defina uma cor padrão para cada agendamento
+                                        $color = ''; // Cor padrão
 
-                                    if (isset($agendamento['idCor'])) {
-                                        switch ($agendamento['idCor']) { // switch para alterar as cores de acordo com idCor
-                                            case 1:
-                                                $color = 'orange';
-                                                break;
-                                            case 2:
-                                                $color = 'green';
-                                                break;
-                                            case 3:
-                                                $color = 'yellow';
-                                                break;
-                                            case 4:
-                                                $color = 'blue';
-                                                break;
-                                            case 5:
-                                                $color = 'red';
-                                                break;
-                                            default:
-                                                $color = 'gray'; // Cor padrão caso nenhum dos valores seja encontrado
+                                        if (isset($agendamento['idCor'])) {
+                                            switch ($agendamento['idCor']) {
+                                                case 1:
+                                                    $color = 'orange';
+                                                    break;
+                                                case 2:
+                                                    $color = 'green';
+                                                    break;
+                                                case 3:
+                                                    $color = 'yellow';
+                                                    break;
+                                                case 4:
+                                                    $color = '#1B98E0';
+                                                    break;
+                                                case 5:
+                                                    $color = 'red';
+                                                    break;
+                                                default:
+                                                    $color = 'gray'; // Cor padrão caso nenhum dos valores seja encontrado
+                                            }
                                         }
-                                    }
-                                    ?>
-                                    <div class="agendamento" style="background-color: <?= $color ?>;">
-                                        <strong><?php echo htmlspecialchars($agendamento['professor_nome']); ?></strong><br> <!-- Exibe o nome do professor -->
-                                    </div>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </td>
-                    <?php endforeach; ?>
-                </tr>
-            <?php endforeach; ?>
-        <?php endif; ?>
+                                        ?>
+                                        <div class="agendamento" style="background-color: <?php echo $color; ?>;">
+                                            <strong><?php echo htmlspecialchars($agendamento['professor_nome']); ?></strong>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </td>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
     </table>
+
 
 </body>
 

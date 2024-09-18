@@ -1,12 +1,13 @@
 /*Estilo do calendario*/
 .conteudo {
-
   margin-left: auto;
   margin-right: auto;
   width: 500px;
   background-color: #1B98E0;
   border-radius: 10px;
   padding-bottom: 15px;
+  position: relative;
+  /* Adicionado para possibilitar o posicionamento das setas */
 }
 
 hr {
@@ -17,11 +18,13 @@ hr {
 }
 
 h2 {
-
   text-align: center;
   margin-top: 20px;
   font-size: 32px;
   text-transform: uppercase;
+  color: white;
+  position: relative;
+  z-index: 1;
 }
 
 td {
@@ -31,34 +34,34 @@ td {
 
 .btn-ant,
 .btn-pro {
-
   position: absolute;
-  top: 10%;
+  top: 40px;
+  /* Alinhado com o topo do cabeçalho */
   height: 32px;
   line-height: 32px;
-  margin-top: -16px;
   background-color: #1B98E0;
   border-radius: 10px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.264);
+  z-index: 2;
+  /* Garantir que fiquem acima do conteúdo */
 }
 
 .btn-ant {
-  right: 60%;
+  left: 10px;
+  /* Ajustado para posicionar à esquerda */
 }
 
 .btn-pro {
-
-  left: 60%;
+  right: 10px;
+  /* Ajustado para posicionar à direita */
 }
 
 .btn-ant:hover,
 .btn-pro:hover {
-
   background-color: #247BA0;
 }
 
 table {
-
   margin-left: auto;
   margin-right: auto;
   margin-top: 20px;
@@ -215,15 +218,41 @@ article>div:hover {
 }
 
 /*Estilo das Informações do serviço*/
-.informacoes {
+.quantidade {
 
-  background-color: #FFD2E1;
+  background-color: #1B98E0;
+  color: white;
   width: 470px;
   padding: 20px;
   border-radius: 10px;
   margin-top: 30px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.quantidade {
+  text-align: center;
+}
+
+#servico {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#preferencia {
+  width: 50px;
+  padding: 2px;
+  font-size: 16px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  text-align: center;
+}
+
+#preferencia option {
+  text-align: center;
 }
 
 #servico,
@@ -274,4 +303,19 @@ article>div:hover {
 
 #submit:hover {
   background-color: #247BA0;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  gap: auto;
+  margin-right: 90px;
+  margin-top: 5%;
+}
+
+.quadrado {
+  background-color: #bfddf3;
+  padding: 10px;
+  border-radius: 5%;
+  margin-right: 15%;
 }

@@ -18,26 +18,20 @@ $actualDate = date("d-m-Y");
     <title>Agendamento</title>
 </head>
 
-<body>
+<body class="container">
 
     <section class="conteudo">
 
         <div class="calendario">
 
-            <header>
+            <a class="btn-ant" id="btn_prev"><img src="https://i.imgur.com/wrwDSRQ.png" /></a>
 
-                <a class="btn-ant" id="btn_prev"><img src="https://i.imgur.com/wrwDSRQ.png" /></a>
+            <h2 id="mes" style="color: white;">Mês</h2>
+            <h2 id="ano" style="color: white;">Ano</h2>
 
-                <h2 id="mes" style="color: white;">Mês</h2>
-                <h2 id="ano" style="color: white;">Ano</h2>
-
-                <a class="btn-pro" id="btn_next"><img src="https://i.imgur.com/4NINDmb.png" /></a>
-            </header>
-
-            <hr>
+            <a class="btn-pro" id="btn_next"><img src="https://i.imgur.com/4NINDmb.png" /></a>
 
             <table>
-
                 <thead>
 
                     <tr>
@@ -120,26 +114,40 @@ $actualDate = date("d-m-Y");
 
     </section>
 
-    <h2>Escolha seu Horário!</h2>
+    <section class="quadrado">
+        <h2 style="color: #1B98E0;">Escolha seu Horário!</h2>
 
 
-    <section class="secao-turno">
+        <section class="secao-turno">
 
-        <div id="turno">
+            <div id="turno">
 
-            <p id="manha">Manhã</p>
-            <p id="noite">Noite</p>
+                <p id="manha">Manhã</p> 
+                <p id="noite">Noite</p>
 
-        </div>
+            </div>
+
+        </section>
+
+        <section class="horas">
+        </section>
+
+        <section class="quantidade">
+            <h3 style="margin-left:20px; " id="servico">Quantidade de Caixas:</h3>
+            <select id="preferencia">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select><br>
+        </section>
+        <input type="hidden" id="redirect" value="<?php echo "?id_professor=$id&data=$actualDate" ?>">
+        <br><br>
+        <input type="submit" id="submit" value="Reservar">
 
     </section>
 
-    <section class="horas">
-    </section>
-    <input type="hidden" id="redirect" value="<?php echo "?id_professor=$id&data=$actualDate" ?>">
-
-    <br>
-    <input type="submit" id="submit" value="Reservar">
 </body>
 
 </html>
