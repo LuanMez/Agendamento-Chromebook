@@ -158,23 +158,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('submit').addEventListener('click', (submit) => {
         submit.preventDefault();
-        const redirectLink = document.getElementById("redirect").getAttribute("value")
-        var data = document.getElementsByClassName("dia-selecionado")[0].getAttribute("value");
-        var hora = checkHoraArray();
 
-        const postData = `data=${encodeURIComponent(data)}&hora=${encodeURIComponent(hora)}`;
+        const data = document.getElementsByClassName("dia-selecionado")[0].getAttribute("value");
+        const hora = checkHoraArray();
+        const preferencia = document.getElementById("preferencia").value; // Captura a quantidade selecionada
 
+        const postData = `data=${encodeURIComponent(data)}&hora=${encodeURIComponent(hora)}&preferencia=${encodeURIComponent(preferencia)}`;
 
         var httpc = new XMLHttpRequest();
         var url = "createAgendamento.php";
         httpc.open("POST", url, true);
-
         httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-        httpc.onreadystatechange = function () { //Call a function when the state changes.
-            alert(httpc.responseText);
-            window.location.replace("AgendaSemanal.php" + redirectLink);
-
+        httpc.onreadystatechange = function () {
+            if (httpc.readyState == 4 && httpc.status == 200) {
+                alert(httpc.responseText);
+                const redirectLink = document.getElementById("redirect").getAttribute("value");
+                window.location.replace("AgendaSemanal.php" + redirectLink);
+            }
         };
         httpc.send(postData);
 
