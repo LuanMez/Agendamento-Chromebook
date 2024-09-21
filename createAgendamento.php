@@ -7,11 +7,17 @@ $username = "root";
 $password = "";
 $dbname = "chromebook";
 
+// Captura os valores enviados via POST
 $data = $_POST["data"];
-$hora = $_POST["hora"];
-$preferencia = intval($_POST['preferencia']); //pegando a quantidade de caixas
+$horarios = explode(",", $_POST["horarios"]); // Array de horários selecionados
+$preferencia = intval($_POST['preferencia']); // Captura a quantidade de agendamentos escolhida pelo usuário
 $cores = array("1", "2", "3", "4", "5");
 $id_professor = $_SESSION['id'];
+
+// Exibe os valores para verificar se estão corretos
+echo "Data: $data<br>";
+echo "Horários: " . implode(", ", $horarios) . "<br>";
+echo "Preferência: $preferencia<br>";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -30,17 +36,37 @@ function insertAgendamento($id_professor, $idC, $data, $hora)
 }
 
 $agendados = 0; // Contador de agendamentos feitos
-foreach ($cores as $cor) {
-  if ($agendados >= $preferencia) {
-    break; // Para o loop quando atingir a quantidade de agendamentos escolhidos
-  }
 
-  $result = $conn->query(searchCor($cor, $data, $hora));
+// Loop pelos horários selecionados
+foreach ($horarios as $hora) {
+  echo "Tentando agendar para o horário: $hora<br>"; // Debug
 
-  if (mysqli_num_rows($result) == 0) {
-    // Faz o agendamento se a cor não estiver ocupada no horário e data
-    $conn->query(insertAgendamento($id_professor, $cor, $data, $hora));
-    $agendados++; // Incrementa o contador de agendamentos
+  foreach ($cores as $cor) {
+
+    // Executa a consulta para verificar se o horário já está ocupado
+    $result = $conn->query(searchCor($cor, $data, $hora));
+    if ($result === false) {
+      echo "Erro na consulta: " . $conn->error . "<br>";
+    }
+
+    if (mysqli_num_rows($result) == 0) {
+      // Faz o agendamento se a cor não estiver ocupada no horário e data
+      $insertResult = $conn->query(insertAgendamento($id_professor, $cor, $data, $hora));
+
+      if ($insertResult) {
+        echo "Agendamento realizado para o horário $hora com a cor $cor<br>";
+        $agendados++; // Incrementa o contador de agendamentos
+      } else {
+        echo "Erro ao inserir agendamento: " . $conn->error . "<br>";
+      }
+    } else {
+      echo "Horário $hora com a cor $cor já está ocupado<br>";
+    }
+
+    if ($agendados >= $preferencia) {
+      $agendados = 0; //ERA SÓ ISSO MERMAO
+      break; // Para o loop quando atingir a quantidade de agendamentos escolhidos
+    }
   }
 }
 

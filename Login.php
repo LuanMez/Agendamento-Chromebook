@@ -36,15 +36,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['id'] = $id;
             $_SESSION['nome'] = $nome;
 
-            header("Location: /Agendamento_Chrome/AgendaSemanal.php?id_professor=$id");
-            exit();
+            // Verificar se a senha é "1234" (primeiro login)
+            if ($senha === "1234") {
+                // Redirecionar para a página de mudança de senha
+                header("Location: /Agendamento_Chrome/mudarSenha.php?id_professor=$id");
+                exit();
+            } else {
+                // Redirecionar para a página de agenda
+                header("Location: /Agendamento_Chrome/AgendaSemanal.php?id_professor=$id");
+                exit();
+            }
         } else {
-            // Login falhou
-            echo "Senha incorreta!"; //MELHORAR ISSO AQUI
+            // Senha incorreta
+            echo "<script type='text/javascript'>
+                    alert('Senha incorreta!');
+                    window.location.href = 'login.html';
+                  </script>";
         }
     } else {
-        // Login falhou
-        echo "Email incorreto!"; //MELHORAR ISSO AQUI
+        // Email incorreto
+        echo "<script type='text/javascript'>
+                alert('Email incorreto!');
+                window.location.href = 'login.html';
+              </script>";
     }
 
     $stmt->close();

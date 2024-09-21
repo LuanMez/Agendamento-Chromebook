@@ -90,10 +90,11 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log(document.getElementById('turno'));
     console.log(turno.getElementsByTagName('p'));
 
+    let selectedHorarios = [];
+
     function makeSelectable() {
         const turno = document.getElementById('turno');
         const pElements = turno.getElementsByTagName('p');
-
 
         for (let i = 0; i < pElements.length; i++) {
             pElements[i].className = 'turno';
@@ -106,8 +107,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     }
-
-
 
     function mudarHorarios(turno) {
         let horarios;
@@ -128,15 +127,23 @@ document.addEventListener('DOMContentLoaded', function () {
             const div = document.createElement('div');
             div.textContent = horario;
             div.className = 'horario';
+
+            // Controle de seleção e desmarcação
             div.addEventListener('click', function () {
-                const selected = horas.querySelector('.selected');
-                if (selected) {
-                    selected.classList.remove('selected');
-                    selected.removeAttribute("value");
+                if (div.classList.contains('selected')) {
+                    // Desmarcar horário
+                    div.classList.remove('selected');
+                    const index = selectedHorarios.indexOf(horario);
+                    if (index > -1) {
+                        selectedHorarios.splice(index, 1); // Remove o horário do array
+                    }
+                } else {
+                    // Selecionar horário
+                    div.classList.add('selected');
+                    selectedHorarios.push(horario); // Adiciona o horário ao array
                 }
-                this.classList.add('selected');
-                this.setAttribute("value", horario)
             });
+
             horas.appendChild(div);
         });
     }
@@ -148,22 +155,15 @@ document.addEventListener('DOMContentLoaded', function () {
         carregarServicos();
     };
 
-    function checkHoraArray() {
-        if (document.getElementsByClassName("selected")[0].getAttribute("value") == null) {
-            return document.getElementsByClassName("selected")[1].getAttribute("value");
-        } else {
-            return document.getElementsByClassName("selected")[0].getAttribute("value");
-        }
-    }
-
     document.getElementById('submit').addEventListener('click', (submit) => {
         submit.preventDefault();
 
+        const redirectLink = document.getElementById("redirect").getAttribute("value");
         const data = document.getElementsByClassName("dia-selecionado")[0].getAttribute("value");
-        const hora = checkHoraArray();
         const preferencia = document.getElementById("preferencia").value; // Captura a quantidade selecionada
 
-        const postData = `data=${encodeURIComponent(data)}&hora=${encodeURIComponent(hora)}&preferencia=${encodeURIComponent(preferencia)}`;
+        // Enviar os horários selecionados ao servidor
+        const postData = `data=${encodeURIComponent(data)}&horarios=${encodeURIComponent(selectedHorarios.join(','))}&preferencia=${encodeURIComponent(preferencia)}`;
 
         var httpc = new XMLHttpRequest();
         var url = "createAgendamento.php";
@@ -171,12 +171,10 @@ document.addEventListener('DOMContentLoaded', function () {
         httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
         httpc.onreadystatechange = function () {
-            if (httpc.readyState == 4 && httpc.status == 200) {
-                alert(httpc.responseText);
-                const redirectLink = document.getElementById("redirect").getAttribute("value");
-                window.location.replace("AgendaSemanal.php" + redirectLink);
-            }
+            alert(httpc.responseText);
+            window.location.replace("AgendaSemanal.php" + redirectLink);
         };
+
         httpc.send(postData);
 
 

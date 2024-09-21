@@ -114,8 +114,8 @@ if (isset($_GET['id_professor'])) {
     $sql = "SELECT agendamento.*, professor.nome AS professor_nome, agendamento.idCor
         FROM agendamento
         JOIN professor ON agendamento.id_professor = professor.id
-        WHERE agendamento.data BETWEEN ? AND ?";
-
+        WHERE STR_TO_DATE(agendamento.data, '%d-%m-%Y') BETWEEN STR_TO_DATE(?, '%d-%m-%Y') 
+        AND STR_TO_DATE(?, '%d-%m-%Y')";
 
     // Prepara a consulta SQL
     $stmt = $conn->prepare($sql);
@@ -165,7 +165,9 @@ if (isset($_GET['id_professor'])) {
                 $horarios[$hora_formatada][$diaSemana][] = [
                     'professor_nome' => $agendamento['professor_nome'],  // Exibe o nome do professor
                     'data_hora' => $agendamento['data'] . ' ' . $agendamento['horario'],
-                    'idCor' => $agendamento['idCor']
+                    'idCor' => $agendamento['idCor'],
+                    "idProf" => $agendamento['id_professor'],
+                    'id' => $agendamento['id']
                 ];
             } else {
                 $horarios[$hora_formatada][$diaSemana] = [];
@@ -177,6 +179,8 @@ if (isset($_GET['id_professor'])) {
     $stmt->close();
     $conn->close();
 }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -187,7 +191,6 @@ if (isset($_GET['id_professor'])) {
     <title>Agendamento Chromebook</title>
     <style>
         body {
-            /*css*/
             font-family: "Roboto", sans-serif;
             background-color: #f0f0f0;
             margin: 0;
@@ -208,21 +211,20 @@ if (isset($_GET['id_professor'])) {
 
         th,
         td {
-            border: 1px solid #ddd;
+            border: 1px solid #000;
+            /* Altere aqui a cor para preto */
             text-align: center;
             padding: 8px;
+            width: 150px;
         }
 
         th {
             background-color: #f2f2f2;
         }
 
-        .agendamento {
-            /*cor do chromebook */
-            padding: 6px;
-            border-radius: 4px;
-            margin-bottom: 4px;
-            font-size: 14px;
+        td {
+            text-align: center;
+            vertical-align: top;
         }
 
         .navegacao {
@@ -246,19 +248,62 @@ if (isset($_GET['id_professor'])) {
 
         .manha {
             background-color: #e0f7fa;
-            /* Cor azul clara para os horários da manhã */
         }
 
         .noite {
             background-color: #ffe0b2;
-            /* Cor laranja clara para os horários da noite */
         }
 
         .agendamento {
-            padding: 5px;
-            color: #000;
+            border-radius: 4px;
+            margin-bottom: 4px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 14px;
+        }
+
+        .agendamento {
+            padding: 2px;
+            border-radius: 8px;
+            font-family: Arial, sans-serif;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            max-width: 275px;
+        }
+
+        .agendamento strong {
+            display: block;
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .agendamento form {
+            display: inline-block;
+        }
+
+        .agendamento button {
+            background-color: #ff4c4c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 3px;
+        }
+
+        .agendamento button:hover {
+            background-color: #ff1f1f;
+        }
+
+        .agendamento button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 76, 76, 0.5);
         }
     </style>
+
 </head>
 
 <body>
@@ -316,7 +361,7 @@ if (isset($_GET['id_professor'])) {
         case "September":
             $nomeMes = "Setembro";
             break;
-        case "Octuber":
+        case "October":
             $nomeMes = "Outubro";
             break;
         case "November":
@@ -329,12 +374,21 @@ if (isset($_GET['id_professor'])) {
 
     ?>
     <h1>Agendamento Semanal dos Chromebooks</h1>
-    <h1>Data Atual: <?php echo $nomeDia . ", " . date("d", strtotime($hoje)) . " de " .  $nomeMes . " de " . date("Y", strtotime($hoje)); ?></h1>
+    <h1>Data Atual:
+        <?php echo $nomeDia . ", " . date("d", strtotime($hoje)) . " de " . $nomeMes . " de " . date("Y", strtotime($hoje)); ?>
+    </h1>
+
     <div class="navegacao">
         <a href="Agendamento.php">Agendar</a>
-        <a href="?id_professor=<?php echo $id_professor; ?>&data=<?php echo date('d-m-Y', strtotime($inicioDaSemana . ' - 7 days')); ?>">Semana Anterior</a>
-        <a href="?id_professor=<?php echo $id_professor; ?>&data=<?php echo date('d-m-Y', strtotime($inicioDaSemana . ' + 7 days')); ?>">Próxima Semana</a>
+        <a
+            href="?id_professor=<?php echo $id_professor; ?>&data=<?php echo date('d-m-Y', strtotime($inicioDaSemana . ' - 7 days')); ?>">Semana
+            Anterior</a> <!--BOTAOOOO-->
+        <a
+            href="?id_professor=<?php echo $id_professor; ?>&data=<?php echo date('d-m-Y', strtotime($inicioDaSemana . ' + 7 days')); ?>">Próxima
+            Semana</a>
+
     </div>
+
     <table>
         <thead>
             <tr>
@@ -347,12 +401,11 @@ if (isset($_GET['id_professor'])) {
             </tr>
         </thead>
         <tbody>
-            <?php if (isset($horarios) && !empty($horarios)) : ?>
+            <?php if (isset($horarios) && !empty($horarios)): ?>
                 <?php foreach ($horarios as $hora => $dias): ?>
                     <?php
-                    // Converte o horário para um inteiro (somente a hora) para verificar se é manhã ou noite
                     $horaInt = (int) explode(':', $hora)[0];
-                    $classe = ($horaInt < 14) ? 'manha' : 'noite'; // Aplica 'manha' se for antes de 12h, senão 'noite'
+                    $classe = ($horaInt < 14) ? 'manha' : 'noite';
                     ?>
                     <tr class="<?php echo $classe; ?>">
                         <td><?php echo htmlspecialchars($hora); ?></td>
@@ -361,33 +414,38 @@ if (isset($_GET['id_professor'])) {
                                 <?php if (isset($dias[$dia]) && !empty($dias[$dia])): ?>
                                     <?php foreach ($dias[$dia] as $agendamento): ?>
                                         <?php
-                                        // Defina uma cor padrão para cada agendamento
-                                        $color = ''; // Cor padrão
-
+                                        $color = '';
                                         if (isset($agendamento['idCor'])) {
                                             switch ($agendamento['idCor']) {
                                                 case 1:
                                                     $color = 'orange';
                                                     break;
                                                 case 2:
-                                                    $color = 'green';
+                                                    $color = '#03F132'; //verde
                                                     break;
                                                 case 3:
                                                     $color = 'yellow';
                                                     break;
                                                 case 4:
-                                                    $color = '#1B98E0';
+                                                    $color = '#00A8FF'; //azul
                                                     break;
                                                 case 5:
                                                     $color = 'red';
                                                     break;
                                                 default:
-                                                    $color = 'gray'; // Cor padrão caso nenhum dos valores seja encontrado
+                                                    $color = 'gray';
                                             }
                                         }
                                         ?>
                                         <div class="agendamento" style="background-color: <?php echo $color; ?>;">
                                             <strong><?php echo htmlspecialchars($agendamento['professor_nome']); ?></strong>
+                                            <?php if ($_GET["id_professor"] == $agendamento["idProf"]) {
+                                                echo '<form action="cancelarAgendamento.php" method="post">
+                                                        <input type="hidden" name="id_agendamento" value=' .  $agendamento["id"]  . '
+                                                        /><button type="submit">Cancelar Agendamento</button>
+                                                    </form>';
+                                            } ?>
+
                                         </div>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
@@ -397,6 +455,7 @@ if (isset($_GET['id_professor'])) {
                 <?php endforeach; ?>
             <?php endif; ?>
         </tbody>
+
     </table>
 
 
