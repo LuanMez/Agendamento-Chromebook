@@ -17,11 +17,10 @@ body {
   background-color: #1B98E0;
 }
 
-/* COMEÇO DA HEADER */
+/* Restante do CSS */
 header {
   position: relative;
   height: 12%;
-  /* Ajuste conforme necessário */
   background-color: #1B98E0;
   color: white;
   display: flex;
@@ -38,12 +37,6 @@ header {
   margin-bottom: 20px;
 }
 
-.syne-une {
-  font-family: "Syne", sans-serif;
-  font-weight: 300;
-  font-style: normal;
-}
-
 .dsada-1-icon {
   border-radius: var(--br-5xs);
   width: 90px;
@@ -55,7 +48,6 @@ input,
 select {
   border-radius: 8px;
   width: 95%;
-  /* Ajuste conforme necessário */
   height: 40px;
   background-color: #EDF2F7;
   border: none;
@@ -86,32 +78,6 @@ select {
   background-color: #FFB3C1;
 }
 
-.pgina-inicial,
-.registrar {
-  font-weight: 500;
-  font-size: large;
-}
-
-.pgina-inicial {
-  background-color: #4A5568;
-  display: inline-block;
-  width: 186px;
-  height: 50px;
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-}
-
-.pgina-inicial:hover {
-  background-color: #6c757d;
-}
-
-/*.registrar1 {
-
-    /* top: 620px;
-    left: 924px; */
-/*}*/
-
 .bannerAgendamento {
   font-size: 40px;
   display: inline-block;
@@ -119,12 +85,6 @@ select {
   width: 419px;
   height: 109px;
   color: #000;
-}
-
-.unhas-1-icon4 {
-  width: 90px;
-  height: 90px;
-  object-fit: cover;
 }
 
 #submit {
@@ -146,8 +106,6 @@ a:hover {
   color: #fc749d7f;
 }
 
-/* FIM DA HEADER */
-
 .conteudo {
   flex: 1 0 auto;
   display: flex;
@@ -159,7 +117,6 @@ a:hover {
   border-radius: 8px;
   background-color: #fff;
   width: 70%;
-  /* Ajuste conforme necessário */
   max-width: 450px;
   height: auto;
   box-shadow: rgba(164, 232, 255, 0.4) 5px 5px;
@@ -185,22 +142,6 @@ form {
   margin-bottom: 20px;
 }
 
-.login-card-child2 {
-  background-color: #FC749C;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-family: 'Roboto', sans-serif;
-  font-size: large;
-  margin-top: 20px;
-}
-
-.login-card-child2:hover {
-  background-color: #FFB3C1;
-}
-
 .login5 {
   font-size: 36px;
   color: #1B98E0;
@@ -213,87 +154,71 @@ form {
   justify-content: center;
 }
 
-.esqueceu-sua-senha {
-  font-size: 18px;
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: all 0.75s opacity 500ms;
+  visibility: visible;
+  opacity: 1;
 }
 
-/*COMEÇO DO FOOTER*/
+.overlay:target {
+  visibility: hidden;
+  opacity: 0;
+}
 
-.footer-container {
+.popup {
+  margin: 10px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 64%;
+  position: relative;
+  transition: all 1s ease-in-out;
+}
+
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #fff;
+}
+
+.popup .close:hover {
+  color: #d80606;
+}
+
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+/* Estilo geral da imagem no popup */
+.popup-image {
   width: 100%;
-  position: sticky;
-  overflow: hidden;
-  color: rgb(255, 255, 255);
+  height: auto;
+  object-fit: cover;
 }
 
-.footer-container a {
-  color: #FFFFFF;
+/* Esconde a imagem mobile por padrão */
+.mobile-img {
+  display: none;
 }
 
-.footer-container a:hover {
-  color: #FC749C;
-}
+/* Quando a tela for menor que 700px, mostra a imagem mobile e esconde a de desktop */
+@media screen and (max-width: 700px) {
+  .desktop-img {
+    display: none;
+  }
 
-footer {
-  background-color: #000;
-  color: aqua;
-  text-align: center;
-  padding: 20px 0;
+  .mobile-img {
+    display: block;
+  }
 }
-
-.footer-contact,
-.footer-social-media,
-.footer-socialmediaicons,
-.footer-about-us,
-.footer-terms,
-.footer-phone,
-.footer-email {
-  font-size: 24px;
-  text-align: left;
-}
-
-.footer-contact {
-  top: 56px;
-  left: 536px;
-}
-
-.footer-social-media {
-  top: 56px;
-  left: 1034px;
-}
-
-.footer-socialmediaicons {
-  top: 90px;
-  left: 1034px;
-}
-
-.footer-about-us {
-  top: 56px;
-  left: 94px;
-}
-
-.footer-terms {
-  top: 98px;
-  left: 93px;
-}
-
-.icone {
-  width: 30px;
-  height: 30px;
-  margin-bottom: -5px;
-}
-
-.footer-phone {
-  top: 98px;
-  left: 536px;
-}
-
-.footer-email {
-  top: 140px;
-  left: 536px;
-}
-
-/* FIM DO FOOTER */

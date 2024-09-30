@@ -84,8 +84,8 @@ document.addEventListener('DOMContentLoaded', function () {
         GetDaysCalendar(mes, ano);
     });
 
-    const horariosManha = ['7:10', '8:00', '8:50', '9:40', '9:50', '10:40', '11:30', '12:20'];
-    const horariosNoite = ['18:00', '18:40', '19:20', '20:00', '20:40', '20:50', '21:30', '22:10'];
+    const horariosManha = ['7:10', '8:00', '8:50', '9:50', '10:40', '11:30'];
+    const horariosNoite = ['18:00', '18:40', '19:20', '20:00', '20:50', '21:30'];
 
     console.log(document.getElementById('turno'));
     console.log(turno.getElementsByTagName('p'));
@@ -109,12 +109,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function mudarHorarios(turno) {
+        selectedHorarios = []; // Limpa o array ao mudar de turno
         let horarios;
-        if (turno == 'manha') {
+        if (turno === 'manha') {
             horarios = horariosManha;
-        } else if (turno == 'tarde') {
+        } else if (turno === 'tarde') { // Caso tenha horário da tarde
             horarios = horariosTarde;
-        } else if (turno == 'noite') {
+        } else if (turno === 'noite') {
             horarios = horariosNoite;
         }
 
@@ -177,59 +178,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         httpc.send(postData);
 
-
-
-        /* const profissional = document.getElementById('preferencia').value;
-        const dataSelecionadaElement = document.querySelector('.dia-selecionado');
-        const dataSelecionada = `${dataSelecionada}-${formatMonth(mes + 1)}-${ano}`;
-
-
-        const turnoSelecionado = document.querySelector('.turno.selected');
-        const horarioSelecionado = document.querySelector('.horas .selected').textContent;
-
-        const form = document.createElement('form');
-        form.method = 'post';
-        form.action = 'reservar.php';
-
-        const inputProfissional = document.createElement('input');
-        inputProfissional.type = 'hidden';
-        inputProfissional.name = 'preferencia';
-        inputProfissional.value = profissional;
-        form.appendChild(inputProfissional);
-
-
-        const inputData = document.createElement('input');
-        inputData.type = 'hidden';
-        inputData.name = 'dataSelecionada';
-        inputData.value = dataSelecionada;
-        form.appendChild(inputData);
-
-        const inputTurno = document.createElement('input');
-        inputTurno.type = 'hidden';
-        inputTurno.name = 'turnoSelecionado';
-        inputTurno.value = turnoSelecionado;
-        form.appendChild(inputTurno);
-
-        const inputHorario = document.createElement('input');
-        inputHorario.type = 'hidden';
-        inputHorario.name = 'horarioSelecionado';
-        inputHorario.value = horarioSelecionado;
-        form.appendChild(inputHorario);
-
-        const inputCliente = document.createElement('input');
-        inputCliente.type = 'hidden';
-        inputCliente.name = 'id_cliente';
-        inputCliente.value = id_cliente;
-        form.appendChild(inputCliente);
-
-        const inputSalao = document.createElement('input');
-        inputSalao.type = 'hidden';
-        inputSalao.name = 'id_salao';
-        inputSalao.value = id_salao;
-        form.appendChild(inputSalao);
-
-        document.body.appendChild(form); 
-        form.submit(); */
     });
 
 });

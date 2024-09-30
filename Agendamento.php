@@ -1,5 +1,5 @@
 <?php
-require 'Login.php';
+@require 'Login.php';
 date_default_timezone_set("America/Sao_Paulo");
 
 $id = $_SESSION['id'];
@@ -14,7 +14,7 @@ $actualDate = date("d-m-Y");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/StyleAgendamento.css">
-
+    <script type="text/javascript" src="main.js"></script>
     <title>Agendamento</title>
 </head>
 
@@ -113,7 +113,7 @@ $actualDate = date("d-m-Y");
         </div>
 
     </section>
-
+    <br>
     <section class="quadrado">
         <h2 style="color: #1B98E0;">Escolha seu Horário!</h2>
 
@@ -122,7 +122,7 @@ $actualDate = date("d-m-Y");
 
             <div id="turno">
 
-                <p id="manha">Manhã</p> 
+                <p id="manha">Manhã</p>
                 <p id="noite">Noite</p>
 
             </div>
@@ -151,5 +151,3 @@ $actualDate = date("d-m-Y");
 </body>
 
 </html>
-
-<script type="text/javascript" src="main.js"></script>

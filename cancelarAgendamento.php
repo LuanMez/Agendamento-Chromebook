@@ -45,7 +45,7 @@ if (isset($_POST['id_agendamento'])) {
             // Redireciona automaticamente para a agendaSemanal.php com JavaScript, passando id_professor e data
             echo "<script>
                     alert('Agendamento cancelado com sucesso.');
-                    window.location.href = 'agendaSemanal.php?id_professor=$id_professor_logado&data=$data_atual';
+                    window.location.href = 'AgendaSemanal.php?id_professor=$id_professor_logado&data=$data_atual';
                   </script>";
         } else {
             echo "Erro ao cancelar o agendamento.";

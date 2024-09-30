@@ -45,13 +45,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Impedir que o usuário escolha "1234" como nova senha
         $error = "A nova senha não pode ser '1234'. Escolha outra senha.";
     } else {
-        // Atualizar a senha no banco de dados
+        // Criptografar a nova senha antes de salvar
+        $hashed_password = password_hash($nova_senha, PASSWORD_DEFAULT); //criptografia
+
+        // Atualizar a senha no banco de dados com a senha criptografada
         $stmt = $conn->prepare("UPDATE professor SET senha=? WHERE id=?");
         if ($stmt === false) {
             die("Erro ao preparar a consulta: " . $conn->error);
         }
 
-        $stmt->bind_param("si", $nova_senha, $id_professor);
+        $stmt->bind_param("si", $hashed_password, $id_professor);
 
         if ($stmt->execute()) {
             // Se a atualização for bem-sucedida, redirecionar o usuário
@@ -83,28 +86,47 @@ $conn->close();
             height: 100%;
             background-color: #1B98E0;
             font-family: 'Roboto', sans-serif;
-            text-align: center; 
+            text-align: center;
         }
 
         .posi-caixa {
-            align-items: center;
+            display: flex;
             justify-content: center;
-            text-align: center;
-            margin-left: 39%;
-            margin-top: 16%;
+            align-items: center;
+            height: 100vh;
+            /* Garante que o formulário ocupe o centro verticalmente */
+            padding: 20px;
+            /* Evita que o conteúdo encoste nas bordas */
         }
 
+        /* 
         .caixa_alt_senha {
             border-radius: 8px;
             background-color: #fff;
-            width: 70%;
+            width: 100%;
             max-width: 450px;
-            height: auto;
             box-shadow: rgba(164, 232, 255, 0.4) 5px 5px;
             padding: 20px;
+            max-height: auto;
         }
 
-        form {
+        @media screen and (max-width: 768px) {
+            .caixa_alt_senha {
+                width: 90%; 
+                max-width: none; 
+                padding: 30px; 
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .caixa_alt_senha {
+                width: 100%;
+                padding: 20px;
+            }
+        }
+ */
+
+        /* form {
             max-width: 400px;
             margin: auto;
             text-align: center;
@@ -116,15 +138,15 @@ $conn->close();
             display: block;
             width: 100%;
             margin-bottom: 10px;
-        }
+        } */
 
-        input[type="submit"] {
+        /* input[type="submit"] {
             padding: 10px;
             background-color: #1B98E0;
             color: white;
             border: none;
             cursor: pointer;
-        }
+        } */
 
         #error-message {
             color: white;
@@ -132,20 +154,87 @@ $conn->close();
             padding: 10px;
             border-radius: 5px;
             position: fixed;
-            top: 20px; /* Distância do topo */
+            top: 20px;
+            /* Distância do topo */
             left: 50%;
             transform: translateX(-50%);
-            z-index: 1000; /* Para aparecer sobre outros elementos */
-            display: none; /* Inicialmente escondido */
-            transition: opacity 0.5s ease; /* Transição suave */
-            opacity: 0; /* Começa invisível */
+            z-index: 1000;
+            /* Para aparecer sobre outros elementos */
+            display: none;
+            /* Inicialmente escondido */
+            transition: opacity 0.5s ease;
+            /* Transição suave */
+            opacity: 0;
+            /* Começa invisível */
         }
 
         #error-message.show {
-            display: block; /* Exibe quando necessário */
-            opacity: 1; /* Torna visível */
+            display: block;
+            /* Exibe quando necessário */
+            opacity: 1;
+            /* Torna visível */
         }
 
+        .caixa_alt_senha {
+            border-radius: 8px;
+            background-color: #fff;
+            width: 80%;
+            max-width: 500px;
+            height: auto;
+            max-height: 90vh;
+            box-shadow: rgba(164, 232, 255, 0.4) 5px 5px;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        @media screen and (max-width: 768px) {
+            .caixa_alt_senha {
+                width: 85%;
+                /* Aumenta a largura em dispositivos menores */
+                max-width: 500px;
+                /* Ajusta o limite máximo de largura */
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .caixa_alt_senha {
+                width: 95%;
+                /* Aumenta ainda mais a largura para dispositivos muito pequenos */
+                max-width: 400px;
+                /* Limita o tamanho máximo para telas pequenas */
+            }
+        }
+
+        form label {
+            font-size: 20px;
+            /* Aumenta o tamanho dos textos de label */
+            margin-bottom: 10px;
+        }
+
+        form input[type="password"],
+        form input[type="submit"] {
+            font-size: 18px;
+            /* Aumenta o tamanho da fonte dos inputs */
+            height: 50px;
+            /* Aumenta a altura dos campos de texto */
+            margin-bottom: 15px;
+        }
+
+        input[type="submit"] {
+            padding: 15px;
+            /* Aumenta o tamanho do botão */
+            font-size: 20px;
+            /* Aumenta o tamanho da fonte do botão */
+            background-color: #1B98E0;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #13293D;
+            /* Cor de fundo ao passar o mouse */
+        }
     </style>
     <script>
         window.onload = function() {
