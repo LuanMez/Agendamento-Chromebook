@@ -14,17 +14,24 @@ function gerarHorarios()
 {
     $horarios = [];
 
-    // horário da manhã
-    $hora = 7; // hora que começa
-    $minuto = 10; // minuto que começa
-    while ($hora < 12) { // horário para acabar
-        // Formata o horário
-        $hora_formatada = str_pad($hora, 2, '0', STR_PAD_LEFT) . ":" . str_pad($minuto, 2, '0', STR_PAD_LEFT);
+    // horario da manha
+    $hora = 7; //hora que comeca
+    $minuto = 10; //minuto que comeca
+    while ($hora < 13) {  //horario para acabar
+        $hora_formatada = str_pad($hora, 2, '0', STR_PAD_LEFT) . ":" . str_pad($minuto, 2, '0', STR_PAD_LEFT); //formato hora
+        $horarios[$hora_formatada] = [ //dias da semana
+            'Segunda' => [],
+            'Terça' => [],
+            'Quarta' => [],
+            'Quinta' => [],
+            'Sexta' => []
+        ];
 
-        // Adiciona ao array de horários
-        if ($hora == 9 && $minuto == 40) { // faz com que 9:40 não entre no array
+        // verificando se chegou no intervalo de 9:40
+        if ($hora == 9 && $minuto == 40) {
+            // adiciona 09:50 e ajusta o incremento
             $minuto = 50;
-        } else {
+            $hora_formatada = str_pad($hora, 2, '0', STR_PAD_LEFT) . ":" . str_pad($minuto, 2, '0', STR_PAD_LEFT);
             $horarios[$hora_formatada] = [
                 'Segunda' => [],
                 'Terça' => [],
@@ -32,26 +39,37 @@ function gerarHorarios()
                 'Quinta' => [],
                 'Sexta' => []
             ];
-            // Aumenta 50 minutos
+            // ajusta para que o proximo incremento siga o padrao normal
+            $minuto = 40;
+            $hora++;
+        } else {
+            // aumenta 50 minutos
             $minuto += 50;
-            if ($minuto >= 60) { // se passar de 60 aumenta a hora
+            if ($minuto >= 60) {
                 $minuto -= 60;
                 $hora++;
             }
         }
     }
 
-    // horário da noite
-    $hora = 18; // hora que começa
-    $minuto = 0; // minuto que começa
-    while ($hora < 21 || ($hora == 21 && $minuto == 30)) { // horário para acabar
-        // Formata o horário
-        $hora_formatada = str_pad($hora, 2, '0', STR_PAD_LEFT) . ":" . str_pad($minuto, 2, '0', STR_PAD_LEFT);
+    // horario da noite
+    $hora = 18; //hora que comeca
+    $minuto = 00; //minuto que comeca
+    while ($hora < 22 || ($hora == 22 && $minuto == 10)) {  //horario para acabar
+        $hora_formatada = str_pad($hora, 2, '0', STR_PAD_LEFT) . ":" . str_pad($minuto, 2, '0', STR_PAD_LEFT); //formato hora
+        $horarios[$hora_formatada] = [ //dias da semana
+            'Segunda' => [],
+            'Terça' => [],
+            'Quarta' => [],
+            'Quinta' => [],
+            'Sexta' => []
+        ];
 
-        // Adiciona ao array de horários
-        if ($hora == 20 && $minuto == 40) { // faz com que 20:40 não entre no array
+        // verificando se chegou no intervalo de 9:40
+        if ($hora == 20 && $minuto == 40) {
+            // adiciona 20:50 e ajusta o incremento
             $minuto = 50;
-        } else {
+            $hora_formatada = str_pad($hora, 2, '0', STR_PAD_LEFT) . ":" . str_pad($minuto, 2, '0', STR_PAD_LEFT);
             $horarios[$hora_formatada] = [
                 'Segunda' => [],
                 'Terça' => [],
@@ -59,18 +77,20 @@ function gerarHorarios()
                 'Quinta' => [],
                 'Sexta' => []
             ];
-            // Aumenta 40 minutos
+            // ajusta para que o proximo incremento siga o padrao normal
+            $minuto = 30;
+            $hora++;
+        } else {
+            // aumenta 50 minutos
             $minuto += 40;
-            if ($minuto >= 60) { // se passar de 60 aumenta a hora
+            if ($minuto >= 60) {
                 $minuto -= 60;
                 $hora++;
             }
         }
     }
-
     return $horarios;
 }
-
 
 
 
@@ -282,51 +302,6 @@ if (isset($_GET['id_professor'])) {
             outline: none;
             box-shadow: 0 0 0 3px rgba(255, 76, 76, 0.5);
         }
-
-
-        /* Estilos gerais (desktop) */
-        .buttons {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .buttons a {
-            background-color: #1B98E0;
-            color: #ffffff;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            text-align: center;
-        }
-
-        .buttons a:hover {
-            background-color: #247BA0;
-        }
-
-        /* Estilo responsivo para telas menores (mobile) */
-        @media screen and (max-width: 768px) {
-            .buttons {
-                flex-direction: row;
-                /* Muda de coluna para linha */
-                align-items: center;
-                /* Alinha os itens no centro verticalmente */
-                justify-content: center;
-                /* Centraliza os botões horizontalmente */
-            }
-
-            .buttons a {
-                width: auto;
-                /* Define a largura automática dos botões */
-                margin: 0 5px;
-                /* Adiciona margem lateral entre os botões */
-            }
-
-            .buttons a:last-child {
-                margin-right: 0;
-                /* Remove a margem direita do último botão */
-            }
-        }
     </style>
 
 </head>
@@ -404,98 +379,84 @@ if (isset($_GET['id_professor'])) {
     </h1>
 
     <div class="navegacao">
-        <a href="Agendamento.php" class="btn-agendar">Agendar</a>
-        <div class="buttons">
-            <a href="?id_professor=<?php echo $id_professor; ?>&data=<?php echo date('d-m-Y', strtotime($inicioDaSemana . ' - 7 days')); ?>">Semana Anterior</a>
-            <a href="?id_professor=<?php echo $id_professor; ?>&data=<?php echo date('d-m-Y', strtotime($inicioDaSemana . ' + 7 days')); ?>">Próxima Semana</a>
-        </div>
-        <br>
-        <table>
-            <thead>
-                <tr>
-                    <th>Horário</th>
-                    <th>Segunda</th>
-                    <th>Terça</th>
-                    <th>Quarta</th>
-                    <th>Quinta</th>
-                    <th>Sexta</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (isset($horarios) && !empty($horarios)): ?>
-                    <?php foreach ($horarios as $hora => $dias): ?>
-                        <?php
-                        // Calcular o horário de término
-                        list($horaInicio, $minutoInicio) = explode(':', explode(' / ', $hora)[0]);
-                        if ($horaInicio < 18) {
-                            $minutoTermino = $minutoInicio + 50;
-                            $horaTermino = $horaInicio;
-                        } else {
-                            $minutoTermino = $minutoInicio + 40;
-                            $horaTermino = $horaInicio;
-                        }
+        <a href="Agendamento.php">Agendar</a>
+        <a
+            href="?id_professor=<?php echo $id_professor; ?>&data=<?php echo date('d-m-Y', strtotime($inicioDaSemana . ' - 7 days')); ?>">Semana
+            Anterior</a> <!--BOTAOOOO-->
+        <a
+            href="?id_professor=<?php echo $id_professor; ?>&data=<?php echo date('d-m-Y', strtotime($inicioDaSemana . ' + 7 days')); ?>">Próxima
+            Semana</a>
 
-                        if ($minutoTermino >= 60) {
-                            $minutoTermino -= 60;
-                            $horaTermino++;
-                        }
+    </div>
 
-                        $horaTerminoFormatada = str_pad($horaTermino, 2, '0', STR_PAD_LEFT) . ":" . str_pad($minutoTermino, 2, '0', STR_PAD_LEFT);
-                        $horaDisplay = htmlspecialchars($hora) . ' - ' . $horaTerminoFormatada; // Exibe "7:10 / 8:00"
-
-                        $horaInt = (int) explode(':', $horaInicio)[0];
-                        $classe = ($horaInt < 14) ? 'manha' : 'noite';
-                        ?>
-                        <tr class="<?php echo $classe; ?>">
-                            <td><?php echo $horaDisplay; ?></td> <!-- Exibe "7:10 / 8:00" -->
-                            <?php foreach (['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'] as $dia): ?>
-                                <td>
-                                    <?php if (isset($dias[$dia]) && !empty($dias[$dia])): ?>
-                                        <?php foreach ($dias[$dia] as $agendamento): ?>
-                                            <?php
-                                            $color = '';
-                                            if (isset($agendamento['idCor'])) {
-                                                switch ($agendamento['idCor']) {
-                                                    case 1:
-                                                        $color = 'orange';
-                                                        break;
-                                                    case 2:
-                                                        $color = '#03F132'; //verde
-                                                        break;
-                                                    case 3:
-                                                        $color = 'yellow';
-                                                        break;
-                                                    case 4:
-                                                        $color = '#00A8FF'; //azul
-                                                        break;
-                                                    case 5:
-                                                        $color = 'red';
-                                                        break;
-                                                    default:
-                                                        $color = 'gray';
-                                                }
+    <table>
+        <thead>
+            <tr>
+                <th>Horário</th>
+                <th>Segunda</th>
+                <th>Terça</th>
+                <th>Quarta</th>
+                <th>Quinta</th>
+                <th>Sexta</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (isset($horarios) && !empty($horarios)): ?>
+                <?php foreach ($horarios as $hora => $dias): ?>
+                    <?php
+                    $horaInt = (int) explode(':', $hora)[0];
+                    $classe = ($horaInt < 14) ? 'manha' : 'noite';
+                    ?>
+                    <tr class="<?php echo $classe; ?>">
+                        <td><?php echo htmlspecialchars($hora); ?></td>
+                        <?php foreach (['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'] as $dia): ?>
+                            <td>
+                                <?php if (isset($dias[$dia]) && !empty($dias[$dia])): ?>
+                                    <?php foreach ($dias[$dia] as $agendamento): ?>
+                                        <?php
+                                        $color = '';
+                                        if (isset($agendamento['idCor'])) {
+                                            switch ($agendamento['idCor']) {
+                                                case 1:
+                                                    $color = 'orange';
+                                                    break;
+                                                case 2:
+                                                    $color = '#03F132'; //verde
+                                                    break;
+                                                case 3:
+                                                    $color = 'yellow';
+                                                    break;
+                                                case 4:
+                                                    $color = '#00A8FF'; //azul
+                                                    break;
+                                                case 5:
+                                                    $color = 'red';
+                                                    break;
+                                                default:
+                                                    $color = 'gray';
                                             }
-                                            ?>
-                                            <div class="agendamento" style="background-color: <?php echo $color; ?>;">
-                                                <strong><?php echo htmlspecialchars($agendamento['professor_nome']); ?></strong>
-                                                <?php if ($_GET["id_professor"] == $agendamento["idProf"]): ?>
-                                                    <form action="cancelarAgendamento.php" method="post">
-                                                        <input type="hidden" name="id_agendamento" value="<?php echo $agendamento["id"]; ?>" />
-                                                        <button type="submit">Cancelar</button>
-                                                    </form>
-                                                <?php endif; ?>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </td>
-                            <?php endforeach; ?>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </tbody>
+                                        }
+                                        ?>
+                                        <div class="agendamento" style="background-color: <?php echo $color; ?>;">
+                                            <strong><?php echo htmlspecialchars($agendamento['professor_nome']); ?></strong>
+                                            <?php if ($_GET["id_professor"] == $agendamento["idProf"]) {
+                                                echo '<form action="cancelarAgendamento.php" method="post">
+                                                        <input type="hidden" name="id_agendamento" value=' .  $agendamento["id"]  . '
+                                                        /><button type="submit">Cancelar</button>
+                                                    </form>';
+                                            } ?>
 
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </td>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
 
-        </table>
+    </table>
 
 
 </body>
