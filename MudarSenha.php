@@ -45,13 +45,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Impedir que o usuário escolha "1234" como nova senha
         $error = "A nova senha não pode ser '1234'. Escolha outra senha.";
     } else {
-        // Atualizar a senha no banco de dados
+        // Criptografar a nova senha antes de salvar
+        $hashed_password = password_hash($nova_senha, PASSWORD_DEFAULT); //criptografia
+
+        // Atualizar a senha no banco de dados com a senha criptografada
         $stmt = $conn->prepare("UPDATE professor SET senha=? WHERE id=?");
         if ($stmt === false) {
             die("Erro ao preparar a consulta: " . $conn->error);
         }
 
-        $stmt->bind_param("si", $nova_senha, $id_professor);
+        $stmt->bind_param("si", $hashed_password, $id_professor);
 
         if ($stmt->execute()) {
             // Se a atualização for bem-sucedida, redirecionar o usuário

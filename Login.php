@@ -17,11 +17,19 @@ if ($conn->connect_error) {
 
 // Processar o formulário de login
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
+
+    // Evitar injeção de SQL sanitizando a entrada do usuário
+    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $senha = $_POST['senha'];
 
-    // Usar consultas preparadas para evitar injeção de SQL
+    // Verificar se a consulta foi preparada corretamente
     $stmt = $conn->prepare("SELECT id, nome, senha FROM professor WHERE email=?");
+
+    if (!$stmt) {
+        die("Erro na preparação da consulta: " . $conn->error);
+    }
+
+    // Usar consultas preparadas para evitar injeção de SQL
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt->store_result();
@@ -30,22 +38,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_result($id, $nome, $senha_bd);
         $stmt->fetch();
 
-        // Verificar se a senha está correta (sem hash)
-        if ($senha === $senha_bd) {
-            // Login bem-sucedido
+        // Verificar se a senha fornecida é exatamente "1234"
+        if ($senha === "1234") {
+            // Login com senha padrão "1234", redireciona para mudança de senha
             $_SESSION['id'] = $id;
             $_SESSION['nome'] = $nome;
 
-            // Verificar se a senha é "1234" (primeiro login)
-            if ($senha === "1234") {
-                // Redirecionar para a página de mudança de senha
-                header("Location: /Agendamento_Chrome/MudarSenha.php?id_professor=$id");
-                exit();
-            } else {
-                // Redirecionar para a página de agenda
-                header("Location: /Agendamento_Chrome/AgendaSemanal.php?id_professor=$id");
-                exit();
-            }
+            header("Location: /Agendamento_Chrome/MudarSenha.php?id_professor=$id");
+            exit();
+        }
+        // Se não for "1234", verificar o hash da senha armazenada no banco
+        elseif (password_verify($senha, $senha_bd)) {
+            // Login bem-sucedido com senha hash
+            $_SESSION['id'] = $id;
+            $_SESSION['nome'] = $nome;
+
+            // Redirecionar para a página de agenda
+            header("Location: /Agendamento_Chrome/AgendaSemanal.php?id_professor=$id");
+            exit();
         } else {
             // Senha incorreta
             echo "<script type='text/javascript'>
@@ -59,12 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 alert('Email incorreto!');
                 window.location.href = 'Login.html#popup1';
               </script>";
-        var_dump($id);
-        var_dump($nome);
-        var_dump($senha);
-        var_dump($email);
     }
-
 
     $stmt->close();
 }
