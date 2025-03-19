@@ -41,9 +41,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Verificar se as senhas coincidem
     if ($nova_senha !== $confirmar_senha) {
         $error = "As senhas não coincidem!";
-    } elseif ($nova_senha === '1234') {
-        // Impedir que o usuário escolha "1234" como nova senha
-        $error = "A nova senha não pode ser '1234'. Escolha outra senha.";
+    } elseif ($nova_senha === 'faeterj123') {
+        // Impedir que o usuário escolha "faeterj123" como nova senha
+        $error = "A nova senha não pode ser 'faeterj123'. Escolha outra senha.";
     } else {
         // Criptografar a nova senha antes de salvar
         $hashed_password = password_hash($nova_senha, PASSWORD_DEFAULT); //criptografia
@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($stmt->execute()) {
             // Se a atualização for bem-sucedida, redirecionar o usuário
-            header("Location: /Agendamento_Chrome/AgendaSemanal.php?id_professor=$id_professor");
+            header("Location: /Agendamento-Chromebook-main/AgendaSemanal.php?id_professor=$id_professor");
             exit();
         } else {
             $error = "Erro ao atualizar a senha: " . $stmt->error;

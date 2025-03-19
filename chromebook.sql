@@ -61,8 +61,8 @@ CREATE TABLE `professor` (
 --
 
 INSERT INTO `professor` (`id`, `nome`, `email`, `senha`) VALUES
-(1, 'Adm', 'Adm@gmail.com', '1234'),
-(2, 'Maria', 'Maria@gmail.com', '1234');
+(1, 'Adm', 'Adm@gmail.com', 'faeterj123'),
+(2, 'Maria', 'Maria@gmail.com', 'faeterj123');
 
 --
 -- Índices para tabelas despejadas

@@ -1,5 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    // Função para sanitizar entradas
+    function escapeHTML(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
 
     const monthsBR = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
     const tableDays = document.getElementById('dias');
@@ -9,12 +15,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function GetDaysCalendar(mes, ano) {
-        document.getElementById('mes').innerHTML = monthsBR[mes];
-        document.getElementById('ano').innerHTML = ano;
+        document.getElementById('mes').innerHTML = escapeHTML(monthsBR[mes]);
+        document.getElementById('ano').innerHTML = escapeHTML(ano.toString());
 
         let firstDayOfWeek = new Date(ano, mes, 1).getDay() - 1;
         if (firstDayOfWeek < 0) firstDayOfWeek = 6; // Corrige o caso quando firstDayOfWeek é -1
-        let getLastDayThisMonth = new Date(ano, mes, 0).getDate();
+        let getLastDayThisMonth = new Date(ano, mes + 1, 0).getDate();
 
         const dayCells = tableDays.getElementsByTagName('td');
 
@@ -23,36 +29,23 @@ document.addEventListener('DOMContentLoaded', function () {
             let dtNow = new Date();
             let dayTable = dayCells[index];
 
-            // Resetando classes e conteúdo
-            dayTable.classList.remove("mes-anterior");
-            dayTable.classList.remove("proximo-mes");
-            dayTable.classList.remove("dia-atual");
-            dayTable.classList.remove("dia-selecionado");
-
-            dayTable.innerHTML = '';
+            dayTable.className = ''; // Resetando classes
+            dayTable.innerHTML = ''; // Resetando conteúdo
 
             if (i >= 1 && i <= getLastDayThisMonth) {
-                dayTable.innerHTML = i;
+                dayTable.innerHTML = escapeHTML(i.toString());
                 dayTable.addEventListener('click', function () {
-                    let selected = tableDays.querySelector('.dia-selecionado');
+                    const selected = tableDays.querySelector('.dia-selecionado');
                     if (selected) {
                         selected.classList.remove('dia-selecionado');
-                        selected.removeAttribute("value");
+                        selected.removeAttribute('value');
                     }
                     this.classList.add('dia-selecionado');
-                    this.setAttribute("value", formatMonth(i) + "-" + formatMonth(mes + 1) + "-" + ano);
-                    console.log(document.getElementsByClassName("dia-selecionado")[0].getAttribute("value"));
+                    this.setAttribute('value', escapeHTML(`${formatMonth(i)}-${formatMonth(mes + 1)}-${ano}`));
                 });
 
-                if (dt.getFullYear() == dtNow.getFullYear() && dt.getMonth() == dtNow.getMonth() && dt.getDate() == dtNow.getDate()) {
+                if (dt.getFullYear() === dtNow.getFullYear() && dt.getMonth() === dtNow.getMonth() && dt.getDate() === dtNow.getDate()) {
                     dayTable.classList.add('dia-atual');
-                }
-
-                if (i < 1) {
-                    dayTable.classList.add('mes-anterior');
-                }
-                if (i > getLastDayThisMonth) {
-                    dayTable.classList.add('proximo-mes');
                 }
             }
         }
@@ -63,10 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let ano = now.getFullYear();
     GetDaysCalendar(mes, ano);
 
-    const botao_proximo = document.getElementById('btn_next');
-    const botao_anterior = document.getElementById('btn_prev');
-
-    botao_proximo.addEventListener('click', function () {
+    document.getElementById('btn_next').addEventListener('click', function () {
         mes++;
         if (mes > 11) {
             mes = 0;
@@ -75,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
         GetDaysCalendar(mes, ano);
     });
 
-    botao_anterior.addEventListener('click', function () {
+    document.getElementById('btn_prev').addEventListener('click', function () {
         mes--;
         if (mes < 0) {
             mes = 11;
@@ -87,11 +77,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const horariosManha = ['7:10', '8:00', '8:50', '9:50', '10:40', '11:30'];
     const horariosNoite = ['18:00', '18:40', '19:20', '20:00', '20:50', '21:30'];
 
-    console.log(document.getElementById('turno'));
-    console.log(turno.getElementsByTagName('p'));
-
     let selectedHorarios = [];
 
+
+    //função que tem que ser alterada para converter o horario corretamente
     function makeSelectable() {
         const turno = document.getElementById('turno');
         const pElements = turno.getElementsByTagName('p');
@@ -109,12 +98,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function mudarHorarios(turno) {
-        selectedHorarios = []; // Limpa o array ao mudar de turno
+        selectedHorarios = [];
         let horarios;
         if (turno === 'manha') {
             horarios = horariosManha;
-        } else if (turno === 'tarde') { // Caso tenha horário da tarde
-            horarios = horariosTarde;
         } else if (turno === 'noite') {
             horarios = horariosNoite;
         }
@@ -126,22 +113,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
         horarios.forEach(function (horario) {
             const div = document.createElement('div');
-            div.textContent = horario;
+            div.textContent = escapeHTML(horario);
             div.className = 'horario';
 
-            // Controle de seleção e desmarcação
             div.addEventListener('click', function () {
                 if (div.classList.contains('selected')) {
-                    // Desmarcar horário
                     div.classList.remove('selected');
                     const index = selectedHorarios.indexOf(horario);
-                    if (index > -1) {
-                        selectedHorarios.splice(index, 1); // Remove o horário do array
-                    }
+                    if (index > -1) selectedHorarios.splice(index, 1);
                 } else {
-                    // Selecionar horário
                     div.classList.add('selected');
-                    selectedHorarios.push(horario); // Adiciona o horário ao array
+                    selectedHorarios.push(horario);
                 }
             });
 
@@ -149,37 +131,31 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    window.onload = function () {
-        makeSelectable();
-        mudarHorarios('manha');
-        carregarProfissionais();
-        carregarServicos();
-    };
-
     document.getElementById('submit').addEventListener('click', (submit) => {
         submit.preventDefault();
 
-        const redirectLink = document.getElementById("redirect").getAttribute("value");
-        const data = document.getElementsByClassName("dia-selecionado")[0].getAttribute("value");
-        const preferencia = document.getElementById("preferencia").value; // Captura a quantidade selecionada
+        const redirectLink = escapeHTML(document.getElementById("redirect").getAttribute("value"));
+        const data = escapeHTML(document.getElementsByClassName("dia-selecionado")[0]?.getAttribute("value") || '');
+        const preferencia = escapeHTML(document.getElementById("preferencia").value);
 
-        // Enviar os horários selecionados ao servidor
         const postData = `data=${encodeURIComponent(data)}&horarios=${encodeURIComponent(selectedHorarios.join(','))}&preferencia=${encodeURIComponent(preferencia)}`;
 
-        var httpc = new XMLHttpRequest();
-        var url = "createAgendamento.php";
-        httpc.open("POST", url, true);
+        const httpc = new XMLHttpRequest();
+        httpc.open("POST", "createAgendamento.php", true);
         httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
         httpc.onreadystatechange = function () {
-            alert(httpc.responseText);
-            window.location.replace("AgendaSemanal.php" + redirectLink);
+            if (httpc.readyState === 4 && httpc.status === 200) {
+                alert(escapeHTML(httpc.responseText));
+                window.location.replace(`AgendaSemanal.php${redirectLink}`);
+            }
         };
 
         httpc.send(postData);
-
     });
 
+    window.onload = function () {
+        makeSelectable();
+        mudarHorarios('manha');
+    };
 });
-
-

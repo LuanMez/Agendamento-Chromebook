@@ -1,4 +1,5 @@
 <?php
+require_once 'auth.php'; // Autenticação de sessão (verifique se a sessão está ativa)
 // Função para obter o início da semana (segunda-feira) para uma determinada data
 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
 
@@ -93,7 +94,6 @@ function gerarHorarios()
 }
 
 
-
 // Verifica se o parâmetro id_professor foi passado na URL
 if (isset($_GET['id_professor'])) {
     $id_professor = $_GET['id_professor'];
@@ -126,13 +126,11 @@ if (isset($_GET['id_professor'])) {
     // Vincula os parâmetros à consulta preparada
     $stmt->bind_param("ss", $inicioDaSemana, $fimDaSemana);
 
-
     // Executa a consulta
     $stmt->execute();
 
     // Obtém o resultado da consulta
     $result = $stmt->get_result();
-
 
     // Processa os resultados da consulta
     if ($result->num_rows > 0) {
@@ -180,6 +178,14 @@ if (isset($_GET['id_professor'])) {
     $conn->close();
 }
 
+// Código para logout
+if (isset($_POST['logout'])) {
+    session_start();
+    session_unset(); // Destrói todas as variáveis de sessão
+    session_destroy(); // Destrói a sessão
+    header("Location: Login.html"); // Redireciona para a página de login
+    exit();
+}
 
 ?>
 <!DOCTYPE html>
@@ -203,28 +209,22 @@ if (isset($_GET['id_professor'])) {
             margin-bottom: 20px;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
+        .logout-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
         }
 
-        th,
-        td {
-            border: 1px solid #000;
-            /* Altere aqui a cor para preto */
-            text-align: center;
-            padding: 8px;
-            width: 150px;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        td {
-            text-align: center;
-            vertical-align: top;
+        .logout-btn:hover {
+            background-color: darkred;
         }
 
         .navegacao {
@@ -246,6 +246,30 @@ if (isset($_GET['id_professor'])) {
             background-color: #006494;
         }
 
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            overflow-x: auto; /* Adiciona rolagem horizontal em telas pequenas */
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+            text-align: center;
+            padding: 8px;
+            width: 150px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td {
+            text-align: center;
+            vertical-align: top;
+        }
+
         .manha {
             background-color: #e0f7fa;
         }
@@ -260,9 +284,6 @@ if (isset($_GET['id_professor'])) {
             margin-left: auto;
             margin-right: auto;
             font-size: 14px;
-        }
-
-        .agendamento {
             padding: 2px;
             border-radius: 8px;
             font-family: Arial, sans-serif;
@@ -276,10 +297,6 @@ if (isset($_GET['id_professor'])) {
             font-size: 18px;
             color: #333;
             margin-bottom: 5px;
-        }
-
-        .agendamento form {
-            display: inline-block;
         }
 
         .agendamento button {
@@ -302,8 +319,35 @@ if (isset($_GET['id_professor'])) {
             outline: none;
             box-shadow: 0 0 0 3px rgba(255, 76, 76, 0.5);
         }
-    </style>
 
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
+            th,
+            td {
+                padding: 5px;
+                font-size: 12px; /* Reduz o tamanho da fonte em telas menores */
+            }
+
+            .agendamento {
+                max-width: 100%; /* Permite que os agendamentos ocupem toda a largura disponível */
+            }
+
+            .logout-btn {
+                font-size: 14px; /* Ajusta o tamanho do botão de logout */
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 18px; /* Reduz o tamanho do título em telas muito pequenas */
+            }
+
+            .navegacao a {
+                padding: 8px 10px; /* Ajusta o padding dos links de navegação */
+                font-size: 12px; /* Reduz o tamanho da fonte dos links */
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -373,6 +417,11 @@ if (isset($_GET['id_professor'])) {
     }
 
     ?>
+
+    <form method="post" action="AgendaSemanal.php">
+        <button type="submit" name="logout" class="logout-btn">Sair</button>
+    </form>
+
     <h1>Agendamento Semanal dos Chromebooks</h1>
     <h1>Data Atual:
         <?php echo $nomeDia . ", " . date("d", strtotime($hoje)) . " de " . $nomeMes . " de " . date("Y", strtotime($hoje)); ?>
@@ -405,56 +454,88 @@ if (isset($_GET['id_professor'])) {
                 <?php foreach ($horarios as $hora => $dias): ?>
                     <?php
                     $horaInt = (int) explode(':', $hora)[0];
+                    $minutoInt = (int) explode(':', $hora)[1];
                     $classe = ($horaInt < 14) ? 'manha' : 'noite';
-                    ?>
-                    <tr class="<?php echo $classe; ?>">
-                        <td><?php echo htmlspecialchars($hora); ?></td>
-                        <?php foreach (['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'] as $dia): ?>
-                            <td>
-                                <?php if (isset($dias[$dia]) && !empty($dias[$dia])): ?>
-                                    <?php foreach ($dias[$dia] as $agendamento): ?>
-                                        <?php
-                                        $color = '';
-                                        if (isset($agendamento['idCor'])) {
-                                            switch ($agendamento['idCor']) {
-                                                case 1:
-                                                    $color = 'orange';
-                                                    break;
-                                                case 2:
-                                                    $color = '#03F132'; //verde
-                                                    break;
-                                                case 3:
-                                                    $color = 'yellow';
-                                                    break;
-                                                case 4:
-                                                    $color = '#00A8FF'; //azul
-                                                    break;
-                                                case 5:
-                                                    $color = 'red';
-                                                    break;
-                                                default:
-                                                    $color = 'gray';
-                                            }
-                                        }
-                                        ?>
-                                        <div class="agendamento" style="background-color: <?php echo $color; ?>;">
-                                            <strong><?php echo htmlspecialchars($agendamento['professor_nome']); ?></strong>
-                                            <?php if ($_GET["id_professor"] == $agendamento["idProf"]) {
-                                                echo '<form action="cancelarAgendamento.php" method="post">
-                                                        <input type="hidden" name="id_agendamento" value=' .  $agendamento["id"]  . '
-                                                        /><button type="submit">Cancelar</button>
-                                                    </form>';
-                                            } ?>
 
-                                        </div>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </td>
-                        <?php endforeach; ?>
-                    </tr>
+                    // Formata o horário final corretamente
+                    if (($horaInt == 9 && $minutoInt == 40) || ($horaInt == 20 && $minutoInt == 40)) {
+                        // Saltos de 10 minutos
+                        $hora_final = $horaInt;
+                        $minuto_final = $minutoInt + 10;
+                    } elseif ($horaInt >= 18) {
+                        // Incrementos de 40 minutos após as 18:00
+                        $hora_final = $horaInt;
+                        $minuto_final = $minutoInt + 40;
+                        if ($minuto_final >= 60) {
+                            $minuto_final -= 60;
+                            $hora_final++;
+                        }
+                    } else {
+                        // Incrementos regulares de 50 minutos
+                        $hora_final = $horaInt;
+                        $minuto_final = $minutoInt + 50;
+                        if ($minuto_final >= 60) {
+                            $minuto_final -= 60;
+                            $hora_final++;
+                        }
+                    }
+                    $hora_formatada_final = str_pad($hora_final, 2, '0', STR_PAD_LEFT) . ":" . str_pad($minuto_final, 2, '0', STR_PAD_LEFT);
+
+                    // Ignora horários indesejados
+                    if ($hora !== '09:40' && $hora !== '20:40' && $hora !== '12:20' && $hora !== '22:10') {
+                    ?>
+                        <tr class="<?php echo $classe; ?>">
+                            <td><?php echo htmlspecialchars($hora) . " - " . htmlspecialchars($hora_formatada_final); ?></td>
+                            <?php foreach (['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'] as $dia): ?>
+                                <td>
+                                    <?php if (isset($dias[$dia]) && !empty($dias[$dia])): ?>
+                                        <?php foreach ($dias[$dia] as $agendamento): ?>
+                                            <?php
+                                            $color = '';
+                                            if (isset($agendamento['idCor'])) {
+                                                switch ($agendamento['idCor']) {
+                                                    case 1:
+                                                        $color = 'orange';
+                                                        break;
+                                                    case 2:
+                                                        $color = '#03F132'; //verde
+                                                        break;
+                                                    case 3:
+                                                        $color = 'yellow';
+                                                        break;
+                                                    case 4:
+                                                        $color = '#00A8FF'; //azul
+                                                        break;
+                                                    case 5:
+                                                        $color = 'red';
+                                                        break;
+                                                    default:
+                                                        $color = 'gray';
+                                                }
+                                            }
+                                            ?>
+                                            <div class="agendamento" style="background-color: <?php echo $color; ?>;">
+                                                <strong><?php echo htmlspecialchars($agendamento['professor_nome']); ?></strong>
+                                                <?php if ($_GET["id_professor"] == $agendamento["idProf"]) {
+                                                    echo '<form action="cancelarAgendamento.php" method="post">
+                                                    <input type="hidden" name="id_agendamento" value=' .  $agendamento["id"]  . '
+                                                    /><button type="submit">Cancelar</button>
+                                                    </form>';
+                                                } ?>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </td>
+                            <?php endforeach; ?>
+                        </tr>
+                    <?php } ?>
                 <?php endforeach; ?>
             <?php endif; ?>
         </tbody>
+
+
+
+
 
     </table>
 

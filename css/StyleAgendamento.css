@@ -128,10 +128,7 @@ tbody .dia-atual {
   margin-right: auto;
 }
 
-.turno.selected {
-  background-color: #1B98E0;
-  border-radius: 5px;
-}
+
 
 #turno>p {
   display: inline;
@@ -140,21 +137,39 @@ tbody .dia-atual {
 }
 
 #manha {
+  cursor: pointer;
   margin-left: 22%;
-  padding: 3px;
+  padding: 5px;
+  background-color: #247BA0;
+  border-radius: 5px;
 }
 
 #noite {
+  cursor: pointer;
   margin-left: 32%;
-  padding: 3px;
+  padding: 5px;
+  background-color: #247BA0;
+  border-radius: 5px;
 }
 
-#turno>p:hover {
+#manha.selected{
+  background-color: #13293D;
+  border-radius: 5px;
+}
+
+#noite.selected{
+  background-color: #13293D;
+  border-radius: 5px;
+}
+
+/*#turno>p:hover {
   cursor: pointer;
   background-color: #247BA0;
   color: white;
   border-radius: 5px;
-}
+}*/
+
+
 
 .horas {
   /* caixa de horario com cada horario */

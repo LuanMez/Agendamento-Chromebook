@@ -1,5 +1,7 @@
 <?php
 @require 'Login.php';
+require_once 'auth.php';
+
 date_default_timezone_set("America/Sao_Paulo");
 
 $id = $_SESSION['id'];
